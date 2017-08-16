@@ -1,0 +1,7 @@
+machine:
+  ruby:
+    version: 2.1.2
+  timezone: "Europe/Riga"
+dependencies:
+  pre:
+    - gem install bundler -v 1.15.3 --pre
