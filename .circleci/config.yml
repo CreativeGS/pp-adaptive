@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/pp_adaptive
+    docker:
+      # Ruby 2.1.2
+      - image: circleci/ruby@sha256:e49f95920f6294593e99cd6401556a36a8b47703b5bdac0b094b66ae1cdd6569
+        environment:
+          TZ: "/usr/share/zoneinfo/Europe/Riga"
+          RAILS_ENV: test
+          COV: "false"
+
+    steps:
+      - checkout
+
+      - run: gem install bundler -v 1.16.2 --no-doc
+
+      - restore_cache:
+          key: v1-{{ checksum "pp-adaptive.gemspec" }}
+
+      - run: bundle install --path ~/vendor/bundle
+
+      #== save caches ==
+
+      - save_cache:
+          key: v1-{{ checksum "pp-adaptive.gemspec" }}
+          paths:
+            - ~/vendor/bundle
+
+      # == run specs ==
+
+      - run: bundle exec rspec spec/
